@@ -1,0 +1,1803 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Advanced ICT Equipment Learning Center</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+        }
+    </script>
+    <style>
+        body { 
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: linear-gradient(-45deg, #ee7752, #e73c7e, #23a6d5, #23d5ab);
+            background-size: 400% 400%;
+            animation: gradientShift 15s ease infinite;
+        }
+        
+        @keyframes gradientShift {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+        
+        .glass-effect {
+            background: rgba(255, 255, 255, 0.15);
+            backdrop-filter: blur(15px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+        }
+        
+        .dark .glass-effect {
+            background: rgba(0, 0, 0, 0.25);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        .card-hover {
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            transform-style: preserve-3d;
+        }
+        
+        .card-hover:hover {
+            transform: translateY(-12px) rotateX(5deg) scale(1.02);
+            box-shadow: 0 25px 50px rgba(0, 0, 0, 0.25);
+        }
+        
+        .progress-glow {
+            box-shadow: 0 0 20px rgba(59, 130, 246, 0.5);
+            animation: progressPulse 2s ease-in-out infinite alternate;
+        }
+        
+        @keyframes progressPulse {
+            from { box-shadow: 0 0 20px rgba(59, 130, 246, 0.5); }
+            to { box-shadow: 0 0 30px rgba(59, 130, 246, 0.8); }
+        }
+        
+        .flashcard {
+            perspective: 1000px;
+            height: 300px;
+        }
+        
+        .flashcard-inner {
+            position: relative;
+            width: 100%;
+            height: 100%;
+            text-align: center;
+            transition: transform 0.8s;
+            transform-style: preserve-3d;
+        }
+        
+        .flashcard.flipped .flashcard-inner {
+            transform: rotateY(180deg);
+        }
+        
+        .flashcard-front, .flashcard-back {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            backface-visibility: hidden;
+            border-radius: 1rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 2rem;
+        }
+        
+        .flashcard-back {
+            transform: rotateY(180deg);
+        }
+        
+        .typing-animation {
+            overflow: hidden;
+            border-right: 3px solid #3b82f6;
+            white-space: nowrap;
+            animation: typing 3s steps(40, end), blink-caret 0.75s step-end infinite;
+        }
+        
+        @keyframes typing {
+            from { width: 0; }
+            to { width: 100%; }
+        }
+        
+        @keyframes blink-caret {
+            from, to { border-color: transparent; }
+            50% { border-color: #3b82f6; }
+        }
+        
+        .nav-tab {
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .nav-tab::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent);
+            transition: left 0.6s;
+        }
+        
+        .nav-tab:hover::before {
+            left: 100%;
+        }
+        
+        .ai-message {
+            animation: slideInUp 0.6s ease-out;
+        }
+        
+        @keyframes slideInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        .pulse-dot {
+            animation: pulse 2s infinite;
+        }
+        
+        @keyframes pulse {
+            0%, 100% { opacity: 1; transform: scale(1); }
+            50% { opacity: 0.5; transform: scale(1.1); }
+        }
+        
+        .tool-animation {
+            animation: toolFloat 3s ease-in-out infinite;
+        }
+        
+        @keyframes toolFloat {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-10px); }
+        }
+        
+        /* Explosive Effects */
+        .explosion-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 9999;
+        }
+        
+        .firework {
+            position: absolute;
+            width: 4px;
+            height: 4px;
+            border-radius: 50%;
+            animation: firework 1.5s ease-out forwards;
+        }
+        
+        @keyframes firework {
+            0% {
+                transform: scale(1);
+                opacity: 1;
+            }
+            100% {
+                transform: scale(0);
+                opacity: 0;
+            }
+        }
+        
+        .confetti {
+            position: absolute;
+            width: 10px;
+            height: 10px;
+            animation: confetti 3s ease-out forwards;
+        }
+        
+        @keyframes confetti {
+            0% {
+                transform: translateY(0) rotateZ(0deg);
+                opacity: 1;
+            }
+            100% {
+                transform: translateY(100vh) rotateZ(720deg);
+                opacity: 0;
+            }
+        }
+        
+        .success-pulse {
+            animation: successPulse 0.6s ease-out;
+        }
+        
+        @keyframes successPulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.1); box-shadow: 0 0 30px rgba(34, 197, 94, 0.8); }
+            100% { transform: scale(1); }
+        }
+        
+        .shake-wrong {
+            animation: shakeWrong 0.5s ease-in-out;
+        }
+        
+        @keyframes shakeWrong {
+            0%, 100% { transform: translateX(0); }
+            25% { transform: translateX(-10px); }
+            75% { transform: translateX(10px); }
+        }
+        
+        .score-bounce {
+            animation: scoreBounce 0.8s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+        }
+        
+        @keyframes scoreBounce {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.3); }
+            100% { transform: scale(1); }
+        }
+        
+        .interactive-hover {
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        
+        .interactive-hover:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+        }
+        
+        .answer-reveal {
+            animation: answerReveal 0.8s ease-out;
+        }
+        
+        @keyframes answerReveal {
+            0% {
+                opacity: 0;
+                transform: translateY(20px) scale(0.9);
+            }
+            100% {
+                opacity: 1;
+                transform: translateY(0) scale(1);
+            }
+        }
+    </style>
+</head>
+<body class="min-h-screen">
+    <!-- Header -->
+    <header class="glass-effect text-white shadow-2xl sticky top-0 z-50">
+        <div class="max-w-7xl mx-auto px-6 py-4">
+            <div class="flex items-center justify-between">
+                <div class="flex items-center space-x-4">
+                    <div class="w-14 h-14 bg-gradient-to-r from-orange-400 via-pink-500 to-purple-600 rounded-xl flex items-center justify-center shadow-lg tool-animation">
+                        <svg class="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path>
+                        </svg>
+                    </div>
+                    <div>
+                        <h1 class="text-3xl font-bold bg-gradient-to-r from-white via-yellow-200 to-orange-200 bg-clip-text text-transparent">
+                            ICT Equipment Learning Center
+                        </h1>
+                        <p class="text-orange-200 text-sm">Interactive Learning & Assessment Platform</p>
+                    </div>
+                </div>
+                
+                <div class="flex items-center space-x-6">
+                    <button id="themeToggle" class="p-3 rounded-lg glass-effect hover:bg-white/20 transition-all">
+                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z"></path>
+                        </svg>
+                    </button>
+                    <div class="text-right">
+                        <div class="text-sm font-medium">Learning Progress</div>
+                        <div class="flex items-center space-x-3 mt-1">
+                            <div class="w-40 h-3 bg-white/20 rounded-full overflow-hidden">
+                                <div id="progressBar" class="h-3 bg-gradient-to-r from-orange-400 via-pink-500 to-purple-600 rounded-full transition-all duration-1000 progress-glow" style="width: 0%"></div>
+                            </div>
+                            <span id="overallProgress" class="text-sm font-bold">0%</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Navigation -->
+    <nav class="max-w-7xl mx-auto px-6 py-6">
+        <div class="glass-effect rounded-2xl p-3">
+            <div class="grid grid-cols-2 md:grid-cols-5 gap-3">
+                <button class="nav-tab tab-btn px-4 py-4 rounded-xl text-white font-medium transition-all bg-white/25" data-tab="intro">
+                    <div class="flex flex-col items-center space-y-2">
+                        <span class="text-2xl">🏠</span>
+                        <span class="text-sm">Introduction</span>
+                    </div>
+                </button>
+                <button class="nav-tab tab-btn px-4 py-4 rounded-xl text-white font-medium transition-all hover:bg-white/15" data-tab="tools">
+                    <div class="flex flex-col items-center space-y-2">
+                        <span class="text-2xl">🔧</span>
+                        <span class="text-sm">Tools</span>
+                    </div>
+                </button>
+                <button class="nav-tab tab-btn px-4 py-4 rounded-xl text-white font-medium transition-all hover:bg-white/15" data-tab="quiz">
+                    <div class="flex flex-col items-center space-y-2">
+                        <span class="text-2xl">🧠</span>
+                        <span class="text-sm">Quiz</span>
+                    </div>
+                </button>
+                <button class="nav-tab tab-btn px-4 py-4 rounded-xl text-white font-medium transition-all hover:bg-white/15" data-tab="glossary">
+                    <div class="flex flex-col items-center space-y-2">
+                        <span class="text-2xl">📚</span>
+                        <span class="text-sm">Glossary</span>
+                    </div>
+                </button>
+                <button class="nav-tab tab-btn px-4 py-4 rounded-xl text-white font-medium transition-all hover:bg-white/15" data-tab="ai-assistant">
+                    <div class="flex flex-col items-center space-y-2">
+                        <span class="text-2xl">🤖</span>
+                        <span class="text-sm">AI Assistant</span>
+                    </div>
+                </button>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Explosion Effects Container -->
+    <div id="explosionContainer" class="explosion-container"></div>
+
+    <!-- Main Content -->
+    <main class="max-w-7xl mx-auto px-6 pb-12">
+        <!-- Introduction Tab -->
+        <div id="intro" class="tab-content">
+            <div class="glass-effect rounded-2xl p-8 text-white mb-8">
+                <div class="text-center mb-12">
+                    <h2 class="text-4xl font-bold mb-4 bg-gradient-to-r from-orange-400 via-pink-500 to-purple-600 bg-clip-text text-transparent">
+                        Welcome to ICT Equipment Learning
+                    </h2>
+                    <p class="text-xl text-orange-100 typing-animation">Master the fundamentals of electronic measurement and testing</p>
+                </div>
+                
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                    <div class="card-hover glass-effect rounded-xl p-6 text-center">
+                        <div class="w-16 h-16 bg-gradient-to-r from-blue-400 to-cyan-500 rounded-full flex items-center justify-center mx-auto mb-4">
+                            <span class="text-2xl">🎯</span>
+                        </div>
+                        <h3 class="text-xl font-bold mb-3">Learning Objectives</h3>
+                        <ul class="text-sm text-orange-100 space-y-2 text-left">
+                            <li>• Understand digital measurement tools</li>
+                            <li>• Master safety procedures</li>
+                            <li>• Practice hands-on simulations</li>
+                            <li>• Build technical vocabulary</li>
+                        </ul>
+                    </div>
+                    
+                    <div class="card-hover glass-effect rounded-xl p-6 text-center">
+                        <div class="w-16 h-16 bg-gradient-to-r from-green-400 to-teal-500 rounded-full flex items-center justify-center mx-auto mb-4">
+                            <span class="text-2xl">📊</span>
+                        </div>
+                        <h3 class="text-xl font-bold mb-3">Course Structure</h3>
+                        <ul class="text-sm text-orange-100 space-y-2 text-left">
+                            <li>• Interactive tool exploration</li>
+                            <li>• Knowledge assessments</li>
+                            <li>• Flashcard learning system</li>
+                            <li>• AI-powered assistance</li>
+                        </ul>
+                    </div>
+                    
+                    <div class="card-hover glass-effect rounded-xl p-6 text-center">
+                        <div class="w-16 h-16 bg-gradient-to-r from-purple-400 to-pink-500 rounded-full flex items-center justify-center mx-auto mb-4">
+                            <span class="text-2xl">🏆</span>
+                        </div>
+                        <h3 class="text-xl font-bold mb-3">Achievement Goals</h3>
+                        <ul class="text-sm text-orange-100 space-y-2 text-left">
+                            <li>• Complete all tool modules</li>
+                            <li>• Pass knowledge quizzes</li>
+                            <li>• Master key terminology</li>
+                            <li>• Earn progress badges</li>
+                        </ul>
+                    </div>
+                </div>
+                
+                <div class="mt-12 text-center">
+                    <button id="startLearning" class="px-8 py-4 bg-gradient-to-r from-orange-500 via-pink-500 to-purple-600 rounded-xl text-white font-bold text-lg hover:from-orange-600 hover:via-pink-600 hover:to-purple-700 transition-all transform hover:scale-105 shadow-lg">
+                        🚀 Start Your Learning Journey
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Tools Tab -->
+        <div id="tools" class="tab-content hidden">
+            <div class="glass-effect rounded-2xl p-8 text-white">
+                <h2 class="text-3xl font-bold mb-8 text-center bg-gradient-to-r from-orange-400 via-pink-500 to-purple-600 bg-clip-text text-transparent">
+                    ICT Equipment & Tools
+                </h2>
+                
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                    <!-- Digital Multimeter -->
+                    <div class="card-hover glass-effect rounded-2xl p-8">
+                        <div class="flex items-center justify-between mb-6">
+                            <h3 class="text-xl font-bold">Digital Multimeter</h3>
+                            <div class="w-4 h-4 bg-green-400 rounded-full pulse-dot"></div>
+                        </div>
+                        
+                        <div class="mb-6">
+                            <div class="w-24 h-24 mx-auto bg-gradient-to-br from-yellow-400 to-orange-500 rounded-2xl flex items-center justify-center shadow-lg tool-animation">
+                                <svg class="w-14 h-14 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 00-2-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"></path>
+                                </svg>
+                            </div>
+                        </div>
+                        
+                        <p class="text-orange-100 mb-6 text-center">Precision measurement of voltage, current, and resistance</p>
+                        
+                        <div class="space-y-3">
+                            <div class="flex justify-between items-center">
+                                <span class="text-orange-200">Voltage Range</span>
+                                <span class="font-mono bg-black/30 px-3 py-1 rounded-lg">0-1000V</span>
+                            </div>
+                            <div class="flex justify-between items-center">
+                                <span class="text-orange-200">Current Range</span>
+                                <span class="font-mono bg-black/30 px-3 py-1 rounded-lg">0-10A</span>
+                            </div>
+                            <div class="flex justify-between items-center">
+                                <span class="text-orange-200">Accuracy</span>
+                                <span class="font-mono bg-black/30 px-3 py-1 rounded-lg">±0.5%</span>
+                            </div>
+                        </div>
+                        
+                        <button class="tool-learn-btn w-full mt-6 px-4 py-2 bg-gradient-to-r from-yellow-500 to-orange-600 rounded-lg hover:from-yellow-600 hover:to-orange-700 transition-all interactive-hover" data-tool="multimeter">
+                            🔍 Interactive Demo
+                        </button>
+                    </div>
+
+                    <!-- Digital Oscilloscope -->
+                    <div class="card-hover glass-effect rounded-2xl p-8">
+                        <div class="flex items-center justify-between mb-6">
+                            <h3 class="text-xl font-bold">Digital Oscilloscope</h3>
+                            <div class="w-4 h-4 bg-blue-400 rounded-full pulse-dot"></div>
+                        </div>
+                        
+                        <div class="mb-6">
+                            <div class="w-24 h-24 mx-auto bg-gradient-to-br from-green-400 to-blue-500 rounded-2xl flex items-center justify-center shadow-lg tool-animation">
+                                <svg class="w-14 h-14 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.75 17L9 20l-1 1h8l-1-1-.75-3M3 13h18M5 17h14a2 2 0 002-2V5a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path>
+                                </svg>
+                            </div>
+                        </div>
+                        
+                        <p class="text-orange-100 mb-6 text-center">Visualize electrical waveforms and analyze signals</p>
+                        
+                        <div class="space-y-3">
+                            <div class="flex justify-between items-center">
+                                <span class="text-orange-200">Bandwidth</span>
+                                <span class="font-mono bg-black/30 px-3 py-1 rounded-lg">100 MHz</span>
+                            </div>
+                            <div class="flex justify-between items-center">
+                                <span class="text-orange-200">Channels</span>
+                                <span class="font-mono bg-black/30 px-3 py-1 rounded-lg">4</span>
+                            </div>
+                            <div class="flex justify-between items-center">
+                                <span class="text-orange-200">Sample Rate</span>
+                                <span class="font-mono bg-black/30 px-3 py-1 rounded-lg">1 GSa/s</span>
+                            </div>
+                        </div>
+                        
+                        <button class="tool-learn-btn w-full mt-6 px-4 py-2 bg-gradient-to-r from-green-500 to-blue-600 rounded-lg hover:from-green-600 hover:to-blue-700 transition-all interactive-hover" data-tool="oscilloscope">
+                            📊 Interactive Demo
+                        </button>
+                    </div>
+
+                    <!-- Function Generator -->
+                    <div class="card-hover glass-effect rounded-2xl p-8">
+                        <div class="flex items-center justify-between mb-6">
+                            <h3 class="text-xl font-bold">Function Generator</h3>
+                            <div class="w-4 h-4 bg-purple-400 rounded-full pulse-dot"></div>
+                        </div>
+                        
+                        <div class="mb-6">
+                            <div class="w-24 h-24 mx-auto bg-gradient-to-br from-purple-400 to-pink-500 rounded-2xl flex items-center justify-center shadow-lg tool-animation">
+                                <svg class="w-14 h-14 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path>
+                                </svg>
+                            </div>
+                        </div>
+                        
+                        <p class="text-orange-100 mb-6 text-center">Generate precise waveforms for testing</p>
+                        
+                        <div class="space-y-3">
+                            <div class="flex justify-between items-center">
+                                <span class="text-orange-200">Frequency</span>
+                                <span class="font-mono bg-black/30 px-3 py-1 rounded-lg">1Hz-25MHz</span>
+                            </div>
+                            <div class="flex justify-between items-center">
+                                <span class="text-orange-200">Waveforms</span>
+                                <span class="font-mono bg-black/30 px-3 py-1 rounded-lg">Sin/Sq/Tri</span>
+                            </div>
+                            <div class="flex justify-between items-center">
+                                <span class="text-orange-200">Amplitude</span>
+                                <span class="font-mono bg-black/30 px-3 py-1 rounded-lg">0-10V</span>
+                            </div>
+                        </div>
+                        
+                        <button class="tool-learn-btn w-full mt-6 px-4 py-2 bg-gradient-to-r from-purple-500 to-pink-600 rounded-lg hover:from-purple-600 hover:to-pink-700 transition-all interactive-hover" data-tool="function-generator">
+                            ⚡ Interactive Demo
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Quiz Tab -->
+        <div id="quiz" class="tab-content hidden">
+            <div class="glass-effect rounded-2xl p-8 text-white">
+                <h2 class="text-3xl font-bold mb-8 text-center bg-gradient-to-r from-orange-400 via-pink-500 to-purple-600 bg-clip-text text-transparent">
+                    Knowledge Assessment Quiz
+                </h2>
+                
+                <div id="quizContainer">
+                    <div class="mb-8">
+                        <div class="flex justify-between items-center mb-4">
+                            <span class="text-lg font-medium">Question <span id="currentQuestion">1</span> of <span id="totalQuestions">10</span></span>
+                            <span class="text-lg font-medium">Score: <span id="quizScore">0</span>/10</span>
+                        </div>
+                        <div class="w-full bg-white/20 rounded-full h-4">
+                            <div id="quizProgress" class="bg-gradient-to-r from-orange-400 via-pink-500 to-purple-600 h-4 rounded-full transition-all duration-500 progress-glow" style="width: 10%"></div>
+                        </div>
+                    </div>
+                    
+                    <div id="questionCard" class="glass-effect rounded-xl p-8 mb-8">
+                        <h3 class="text-xl font-semibold mb-6" id="questionText">What is the primary function of a digital multimeter?</h3>
+                        <div class="space-y-4" id="answerOptions">
+                            <!-- Options will be populated by JavaScript -->
+                        </div>
+                        <div id="explanationBox" class="hidden mt-6 p-4 glass-effect rounded-lg border-l-4 border-blue-400 answer-reveal">
+                            <div class="flex items-start space-x-3">
+                                <div class="w-8 h-8 bg-blue-500 rounded-full flex items-center justify-center flex-shrink-0">
+                                    <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                                    </svg>
+                                </div>
+                                <div>
+                                    <h4 class="font-semibold text-blue-300 mb-2">💡 Explanation</h4>
+                                    <p id="explanationText" class="text-orange-100"></p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="flex justify-between">
+                        <button id="prevQuestion" class="px-8 py-3 glass-effect rounded-xl hover:bg-white/20 transition-all disabled:opacity-50" disabled>
+                            ← Previous
+                        </button>
+                        <button id="nextQuestion" class="px-8 py-3 bg-gradient-to-r from-orange-500 via-pink-500 to-purple-600 rounded-xl hover:from-orange-600 hover:via-pink-600 hover:to-purple-700 transition-all">
+                            Next →
+                        </button>
+                    </div>
+                </div>
+                
+                <div id="quizResults" class="hidden text-center">
+                    <div class="mb-8">
+                        <div class="w-32 h-32 mx-auto mb-6 bg-gradient-to-r from-green-400 to-blue-500 rounded-full flex items-center justify-center">
+                            <svg class="w-16 h-16 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                            </svg>
+                        </div>
+                        <h3 class="text-4xl font-bold mb-4">Quiz Complete!</h3>
+                        <p class="text-2xl mb-4">Your Score: <span id="finalScore" class="font-bold text-orange-400">0</span>/10</p>
+                        <p id="scoreMessage" class="text-lg text-orange-200 mb-6"></p>
+                    </div>
+                    <button id="restartQuiz" class="px-8 py-3 bg-gradient-to-r from-orange-500 via-pink-500 to-purple-600 rounded-xl hover:from-orange-600 hover:via-pink-600 hover:to-purple-700 transition-all">
+                        🔄 Restart Quiz
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Glossary Tab -->
+        <div id="glossary" class="tab-content hidden">
+            <div class="glass-effect rounded-2xl p-8 text-white">
+                <h2 class="text-3xl font-bold mb-8 text-center bg-gradient-to-r from-orange-400 via-pink-500 to-purple-600 bg-clip-text text-transparent">
+                    Interactive Glossary Flashcards
+                </h2>
+                
+                <div class="mb-8 text-center">
+                    <div class="flex justify-center items-center space-x-6 mb-4">
+                        <span class="text-lg">Card <span id="currentCard">1</span> of <span id="totalCards">12</span></span>
+                        <div class="flex items-center space-x-2">
+                            <span class="text-sm">Mastered:</span>
+                            <span id="masteredCount" class="px-3 py-1 bg-green-500/30 rounded-full text-sm font-bold">0</span>
+                        </div>
+                    </div>
+                    <div class="w-full max-w-md mx-auto bg-white/20 rounded-full h-3">
+                        <div id="glossaryProgress" class="bg-gradient-to-r from-orange-400 via-pink-500 to-purple-600 h-3 rounded-full transition-all duration-500" style="width: 8.33%"></div>
+                    </div>
+                </div>
+                
+                <div class="max-w-2xl mx-auto">
+                    <div class="flashcard" id="flashcard">
+                        <div class="flashcard-inner">
+                            <div class="flashcard-front glass-effect bg-gradient-to-br from-blue-500/30 to-purple-600/30">
+                                <div class="text-center">
+                                    <div class="text-4xl mb-4">🔍</div>
+                                    <h3 class="text-2xl font-bold mb-4" id="termName">Multimeter</h3>
+                                    <p class="text-orange-200">Click to reveal definition</p>
+                                </div>
+                            </div>
+                            <div class="flashcard-back glass-effect bg-gradient-to-br from-green-500/30 to-teal-600/30">
+                                <div class="text-center">
+                                    <div class="text-4xl mb-4">💡</div>
+                                    <p class="text-lg leading-relaxed" id="termDefinition">A versatile electronic measuring instrument that combines multiple measurement functions in one device, including voltage, current, and resistance measurement.</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="flex justify-center space-x-4 mt-8">
+                        <button id="prevCard" class="px-6 py-3 glass-effect rounded-xl hover:bg-white/20 transition-all disabled:opacity-50">
+                            ← Previous
+                        </button>
+                        <button id="flipCard" class="px-8 py-3 bg-gradient-to-r from-blue-500 to-purple-600 rounded-xl hover:from-blue-600 hover:to-purple-700 transition-all">
+                            🔄 Flip Card
+                        </button>
+                        <button id="nextCard" class="px-6 py-3 glass-effect rounded-xl hover:bg-white/20 transition-all">
+                            Next →
+                        </button>
+                    </div>
+                    
+                    <div class="flex justify-center space-x-4 mt-6">
+                        <button id="knowCard" class="px-6 py-2 bg-green-500/30 border border-green-400 rounded-lg hover:bg-green-500/50 transition-all">
+                            ✅ I Know This
+                        </button>
+                        <button id="studyCard" class="px-6 py-2 bg-orange-500/30 border border-orange-400 rounded-lg hover:bg-orange-500/50 transition-all">
+                            📚 Need to Study
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- AI Assistant Tab -->
+        <div id="ai-assistant" class="tab-content hidden">
+            <div class="glass-effect rounded-2xl p-8 text-white">
+                <div class="flex items-center justify-between mb-8">
+                    <div>
+                        <h2 class="text-3xl font-bold bg-gradient-to-r from-orange-400 via-pink-500 to-purple-600 bg-clip-text text-transparent">
+                            AI Learning Assistant
+                        </h2>
+                        <p class="text-orange-200 mt-2">Powered by real-time internet access and advanced AI</p>
+                    </div>
+                    <div class="flex items-center space-x-3">
+                        <div class="w-3 h-3 bg-green-400 rounded-full pulse-dot"></div>
+                        <span class="text-green-400 font-medium">🌐 Online & Ready</span>
+                    </div>
+                </div>
+                
+                <div class="grid grid-cols-1 lg:grid-cols-4 gap-8">
+                    <!-- Chat Interface -->
+                    <div class="lg:col-span-3">
+                        <div id="chatContainer" class="glass-effect rounded-xl p-6 h-96 overflow-y-auto mb-6 space-y-4">
+                            <div class="ai-message flex items-start space-x-4">
+                                <div class="w-12 h-12 bg-gradient-to-r from-orange-500 via-pink-500 to-purple-600 rounded-full flex items-center justify-center flex-shrink-0">
+                                    <span class="text-white font-bold">AI</span>
+                                </div>
+                                <div class="glass-effect rounded-lg p-4 max-w-md">
+                                    <p class="text-white">Hello! I'm your AI Learning Assistant with real-time internet access. I can help you with ICT equipment questions, find the latest technical specifications, explain complex concepts, and provide current industry insights. What would you like to learn about today?</p>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="flex space-x-3 mb-6">
+                            <input type="text" id="userInput" placeholder="Ask about equipment, get latest specs, or request explanations..." 
+                                   class="flex-1 px-4 py-3 glass-effect rounded-xl text-white placeholder-orange-200 focus:outline-none focus:ring-2 focus:ring-orange-400">
+                            <button id="sendMessage" class="px-6 py-3 bg-gradient-to-r from-orange-500 via-pink-500 to-purple-600 rounded-xl hover:from-orange-600 hover:via-pink-600 hover:to-purple-700 transition-all">
+                                Send
+                            </button>
+                        </div>
+                        
+                        <div>
+                            <p class="text-orange-200 mb-3">💡 Try these questions:</p>
+                            <div class="flex flex-wrap gap-3">
+                                <button class="quick-question px-4 py-2 glass-effect rounded-full text-sm hover:bg-white/20 transition-all">
+                                    Latest multimeter technologies
+                                </button>
+                                <button class="quick-question px-4 py-2 glass-effect rounded-full text-sm hover:bg-white/20 transition-all">
+                                    Safety standards for electrical testing
+                                </button>
+                                <button class="quick-question px-4 py-2 glass-effect rounded-full text-sm hover:bg-white/20 transition-all">
+                                    Oscilloscope bandwidth explained
+                                </button>
+                                <button class="quick-question px-4 py-2 glass-effect rounded-full text-sm hover:bg-white/20 transition-all">
+                                    Current industry best practices
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- AI Capabilities Panel -->
+                    <div class="space-y-4">
+                        <h3 class="text-xl font-bold text-orange-300">🧠 AI Capabilities</h3>
+                        
+                        <div class="glass-effect rounded-lg p-4">
+                            <h4 class="font-semibold text-orange-200 mb-2">🌐 Real-time Research</h4>
+                            <p class="text-sm text-orange-100">Access to current technical specifications and industry updates</p>
+                        </div>
+                        
+                        <div class="glass-effect rounded-lg p-4">
+                            <h4 class="font-semibold text-orange-200 mb-2">📊 Technical Analysis</h4>
+                            <p class="text-sm text-orange-100">Complex equipment comparisons and recommendations</p>
+                        </div>
+                        
+                        <div class="glass-effect rounded-lg p-4">
+                            <h4 class="font-semibold text-orange-200 mb-2">🎓 Learning Support</h4>
+                            <p class="text-sm text-orange-100">Personalized explanations and study guidance</p>
+                        </div>
+                        
+                        <div class="glass-effect rounded-lg p-4">
+                            <h4 class="font-semibold text-orange-200 mb-2">🔧 Troubleshooting</h4>
+                            <p class="text-sm text-orange-100">Step-by-step problem-solving assistance</p>
+                        </div>
+                        
+                        <div class="glass-effect rounded-lg p-4 border border-green-400/30">
+                            <div class="flex items-center space-x-2 mb-2">
+                                <div class="w-2 h-2 bg-green-400 rounded-full pulse-dot"></div>
+                                <span class="text-sm font-medium text-green-400">System Status</span>
+                            </div>
+                            <p class="text-xs text-green-300">AI ready with internet connectivity</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <script>
+        // Global State Management
+        let appState = {
+            currentTab: 'intro',
+            progress: {
+                intro: false,
+                tools: false,
+                quiz: 0,
+                glossary: 0,
+                ai: false
+            },
+            quiz: {
+                currentQuestion: 0,
+                score: 0,
+                answers: [],
+                completed: false
+            },
+            glossary: {
+                currentCard: 0,
+                masteredCards: new Set(),
+                studyCards: new Set()
+            }
+        };
+
+        // Quiz Data
+        const quizData = [
+            {
+                question: "What is the primary function of a digital multimeter?",
+                options: [
+                    "To generate electrical signals",
+                    "To measure electrical quantities like voltage, current, and resistance",
+                    "To amplify audio signals",
+                    "To store electrical energy"
+                ],
+                correct: 1,
+                explanation: "Digital multimeters are versatile instruments designed to measure voltage, current, resistance, and often other electrical parameters."
+            },
+            {
+                question: "What does an oscilloscope primarily display?",
+                options: [
+                    "Static voltage readings",
+                    "Current flow direction",
+                    "Electrical waveforms over time",
+                    "Component temperature"
+                ],
+                correct: 2,
+                explanation: "Oscilloscopes visualize electrical signals as waveforms, showing how voltage changes over time."
+            },
+            {
+                question: "Which safety precaution is most important when working with electrical equipment?",
+                options: [
+                    "Working in bright lighting",
+                    "Ensuring proper grounding and checking for damaged cables",
+                    "Using the fastest measurement settings",
+                    "Working alone for better concentration"
+                ],
+                correct: 1,
+                explanation: "Proper grounding and equipment inspection are fundamental safety practices that prevent electrical hazards."
+            },
+            {
+                question: "What type of waveform does a function generator typically produce?",
+                options: [
+                    "Only sine waves",
+                    "Sine, square, and triangle waves",
+                    "Only digital signals",
+                    "Random noise patterns"
+                ],
+                correct: 1,
+                explanation: "Function generators can produce various standard waveforms including sine, square, triangle, and often sawtooth waves."
+            },
+            {
+                question: "When measuring resistance with a multimeter, the circuit should be:",
+                options: [
+                    "Powered on for accurate readings",
+                    "Completely powered off",
+                    "At maximum voltage",
+                    "Connected to ground only"
+                ],
+                correct: 1,
+                explanation: "Resistance measurements require the circuit to be powered off to avoid damage to the meter and ensure accurate readings."
+            },
+            {
+                question: "What does 'bandwidth' refer to in an oscilloscope?",
+                options: [
+                    "The physical width of the display",
+                    "The range of frequencies it can accurately measure",
+                    "The number of channels available",
+                    "The power consumption"
+                ],
+                correct: 1,
+                explanation: "Bandwidth defines the frequency range over which the oscilloscope can accurately capture and display signals."
+            },
+            {
+                question: "Which unit is used to measure electrical current?",
+                options: [
+                    "Volts (V)",
+                    "Ohms (Ω)",
+                    "Amperes (A)",
+                    "Watts (W)"
+                ],
+                correct: 2,
+                explanation: "Amperes (A) is the SI unit for electrical current, representing the flow of electric charge."
+            },
+            {
+                question: "What is the purpose of calibration in measurement equipment?",
+                options: [
+                    "To make the equipment look professional",
+                    "To ensure accuracy and traceability of measurements",
+                    "To increase the equipment's lifespan",
+                    "To reduce power consumption"
+                ],
+                correct: 1,
+                explanation: "Calibration ensures that instruments provide accurate, reliable measurements by comparing them to known standards."
+            },
+            {
+                question: "In electrical safety, what does 'LOTO' stand for?",
+                options: [
+                    "Lock Out, Tag Out",
+                    "Low Output, Test Only",
+                    "Live Operation, Turn Off",
+                    "Load On, Test Off"
+                ],
+                correct: 0,
+                explanation: "Lock Out, Tag Out (LOTO) is a safety procedure to ensure equipment is properly shut off during maintenance."
+            },
+            {
+                question: "What is the typical input impedance of a digital multimeter when measuring voltage?",
+                options: [
+                    "50 Ohms",
+                    "1 kOhm",
+                    "10 MOhm or higher",
+                    "100 Ohms"
+                ],
+                correct: 2,
+                explanation: "High input impedance (10 MΩ or more) ensures the multimeter doesn't significantly load the circuit being measured."
+            },
+            {
+                question: "What does 'True RMS' measurement capability mean in a multimeter?",
+                options: [
+                    "It only measures DC signals accurately",
+                    "It can accurately measure both sinusoidal and non-sinusoidal AC waveforms",
+                    "It measures the peak value of AC signals",
+                    "It only works with pure sine waves"
+                ],
+                correct: 1,
+                explanation: "True RMS meters can accurately measure the effective value of any AC waveform, not just pure sine waves."
+            },
+            {
+                question: "What is the main advantage of a digital storage oscilloscope (DSO) over an analog oscilloscope?",
+                options: [
+                    "Lower cost",
+                    "Ability to capture and store waveforms for analysis",
+                    "Faster response time",
+                    "Better analog display quality"
+                ],
+                correct: 1,
+                explanation: "DSOs can capture, store, and analyze waveforms digitally, enabling advanced measurement and analysis features."
+            },
+            {
+                question: "Which probe type is most commonly used for general oscilloscope measurements?",
+                options: [
+                    "1:1 passive probe",
+                    "10:1 passive probe",
+                    "Active differential probe",
+                    "Current probe"
+                ],
+                correct: 1,
+                explanation: "10:1 passive probes offer good bandwidth, low loading, and are suitable for most general measurements."
+            },
+            {
+                question: "What does the 'trigger' function do in an oscilloscope?",
+                options: [
+                    "Starts the power supply",
+                    "Synchronizes the display to show a stable waveform",
+                    "Amplifies the input signal",
+                    "Measures the frequency automatically"
+                ],
+                correct: 1,
+                explanation: "Triggering synchronizes the oscilloscope's timebase to the input signal, creating a stable, repeatable display."
+            },
+            {
+                question: "In spectrum analyzers, what does the 'span' control adjust?",
+                options: [
+                    "The amplitude range displayed",
+                    "The frequency range displayed",
+                    "The time duration of measurement",
+                    "The input impedance"
+                ],
+                correct: 1,
+                explanation: "Span controls the frequency range displayed on the spectrum analyzer, from start to stop frequency."
+            },
+            {
+                question: "What is the primary purpose of a logic analyzer?",
+                options: [
+                    "To measure analog voltages",
+                    "To analyze digital signals and timing relationships",
+                    "To generate test patterns",
+                    "To measure power consumption"
+                ],
+                correct: 1,
+                explanation: "Logic analyzers capture and display digital signals, showing timing relationships and protocol information."
+            },
+            {
+                question: "Which measurement is most important when selecting a power supply for a circuit?",
+                options: [
+                    "Only the voltage rating",
+                    "Only the current rating",
+                    "Both voltage and current ratings",
+                    "Only the power efficiency"
+                ],
+                correct: 2,
+                explanation: "Both voltage and current ratings must meet or exceed circuit requirements to ensure proper operation and safety."
+            },
+            {
+                question: "What does 'resolution' mean in the context of digital instruments?",
+                options: [
+                    "How fast the instrument responds",
+                    "The smallest change the instrument can detect and display",
+                    "The maximum value it can measure",
+                    "How accurate the measurements are"
+                ],
+                correct: 1,
+                explanation: "Resolution is the smallest increment of change that an instrument can detect and display in its measurements."
+            },
+            {
+                question: "In network analysis, what does a Vector Network Analyzer (VNA) primarily measure?",
+                options: [
+                    "DC resistance only",
+                    "S-parameters (reflection and transmission coefficients)",
+                    "Power consumption",
+                    "Digital signal integrity"
+                ],
+                correct: 1,
+                explanation: "VNAs measure S-parameters, which describe how RF energy flows through networks and components."
+            },
+            {
+                question: "What is the main safety concern when working with high-frequency RF equipment?",
+                options: [
+                    "Electric shock only",
+                    "RF radiation exposure and burns",
+                    "Equipment overheating only",
+                    "Data corruption"
+                ],
+                correct: 1,
+                explanation: "RF radiation can cause tissue heating and burns, requiring proper safety precautions and exposure limits."
+            }
+        ];
+
+        // Glossary Data
+        const glossaryData = [
+            {
+                term: "Multimeter",
+                definition: "A versatile electronic measuring instrument that combines multiple measurement functions in one device, including voltage, current, and resistance measurement.",
+                icon: "🔍"
+            },
+            {
+                term: "Oscilloscope",
+                definition: "An electronic test instrument that displays electrical waveforms as graphs showing how signals change over time, essential for analyzing AC signals and troubleshooting circuits.",
+                icon: "📊"
+            },
+            {
+                term: "Function Generator",
+                definition: "A piece of electronic test equipment used to generate different types of electrical waveforms (sine, square, triangle) over a wide range of frequencies.",
+                icon: "⚡"
+            },
+            {
+                term: "Bandwidth",
+                definition: "The range of frequencies over which an instrument can accurately measure or reproduce signals, typically measured in Hertz (Hz).",
+                icon: "📡"
+            },
+            {
+                term: "Calibration",
+                definition: "The process of configuring an instrument to provide accurate measurements by comparing it against known reference standards.",
+                icon: "⚖️"
+            },
+            {
+                term: "Impedance",
+                definition: "The total opposition to current flow in an AC circuit, combining both resistance and reactance, measured in Ohms (Ω).",
+                icon: "🔌"
+            },
+            {
+                term: "RMS",
+                definition: "Root Mean Square - a statistical measure of the magnitude of a varying quantity, commonly used to express AC voltage and current values.",
+                icon: "📈"
+            },
+            {
+                term: "Probe",
+                definition: "A physical device used to connect test equipment to the circuit being measured, designed to minimize loading effects on the circuit.",
+                icon: "🔗"
+            },
+            {
+                term: "Ground",
+                definition: "A reference point in an electrical circuit from which voltages are measured, also serves as a safety connection to prevent electrical shock.",
+                icon: "🌍"
+            },
+            {
+                term: "Frequency",
+                definition: "The number of complete cycles of a periodic waveform that occur in one second, measured in Hertz (Hz).",
+                icon: "🌊"
+            },
+            {
+                term: "Amplitude",
+                definition: "The maximum displacement or strength of a signal from its average value, representing the peak value of a waveform.",
+                icon: "📏"
+            },
+            {
+                term: "Resolution",
+                definition: "The smallest change in a measured quantity that can be detected and displayed by an instrument, determining measurement precision.",
+                icon: "🔬"
+            }
+        ];
+
+        // Theme Management
+        const themeToggle = document.getElementById('themeToggle');
+        const html = document.documentElement;
+        
+        themeToggle.addEventListener('click', () => {
+            html.classList.toggle('dark');
+            localStorage.setItem('theme', html.classList.contains('dark') ? 'dark' : 'light');
+        });
+        
+        if (localStorage.getItem('theme') === 'dark') {
+            html.classList.add('dark');
+        }
+
+        // Tab Navigation System
+        const tabBtns = document.querySelectorAll('.tab-btn');
+        const tabContents = document.querySelectorAll('.tab-content');
+        
+        function switchTab(targetTab) {
+            appState.currentTab = targetTab;
+            
+            tabBtns.forEach(btn => {
+                btn.classList.remove('bg-white/25');
+                btn.classList.add('hover:bg-white/15');
+            });
+            
+            const activeBtn = document.querySelector(`[data-tab="${targetTab}"]`);
+            activeBtn.classList.add('bg-white/25');
+            activeBtn.classList.remove('hover:bg-white/15');
+            
+            tabContents.forEach(content => content.classList.add('hidden'));
+            document.getElementById(targetTab).classList.remove('hidden');
+            
+            // Mark tab as visited
+            if (targetTab !== 'intro') {
+                appState.progress[targetTab] = true;
+            }
+            
+            updateProgress();
+        }
+        
+        tabBtns.forEach(btn => {
+            btn.addEventListener('click', () => {
+                switchTab(btn.dataset.tab);
+            });
+        });
+
+        // Start Learning Button
+        document.getElementById('startLearning').addEventListener('click', () => {
+            appState.progress.intro = true;
+            switchTab('tools');
+        });
+
+        // Tool Interactive Demos
+        function showToolDemo(toolType) {
+            const demos = {
+                'multimeter': {
+                    title: '🔍 Digital Multimeter Demo',
+                    content: `
+                        <div class="space-y-6">
+                            <div class="text-center">
+                                <div class="w-32 h-48 mx-auto bg-gradient-to-b from-gray-800 to-gray-900 rounded-xl p-4 shadow-2xl">
+                                    <div class="bg-green-400 text-black text-xl font-mono p-2 rounded mb-4" id="meterDisplay">12.34V</div>
+                                    <div class="grid grid-cols-3 gap-2">
+                                        <button class="meter-btn bg-gray-700 text-white p-2 rounded text-sm" data-mode="voltage">V</button>
+                                        <button class="meter-btn bg-gray-700 text-white p-2 rounded text-sm" data-mode="current">A</button>
+                                        <button class="meter-btn bg-gray-700 text-white p-2 rounded text-sm" data-mode="resistance">Ω</button>
+                                    </div>
+                                </div>
+                            </div>
+                            <p class="text-center text-orange-200">Click the buttons to switch measurement modes!</p>
+                        </div>
+                    `
+                },
+                'oscilloscope': {
+                    title: '📊 Digital Oscilloscope Demo',
+                    content: `
+                        <div class="space-y-6">
+                            <div class="bg-black rounded-xl p-4">
+                                <canvas id="oscilloscopeCanvas" width="400" height="200" class="w-full border border-green-400 rounded"></canvas>
+                            </div>
+                            <div class="flex justify-center space-x-4">
+                                <button class="scope-btn px-4 py-2 bg-blue-500 rounded" data-wave="sine">Sine Wave</button>
+                                <button class="scope-btn px-4 py-2 bg-green-500 rounded" data-wave="square">Square Wave</button>
+                                <button class="scope-btn px-4 py-2 bg-purple-500 rounded" data-wave="triangle">Triangle Wave</button>
+                            </div>
+                        </div>
+                    `
+                },
+                'function-generator': {
+                    title: '⚡ Function Generator Demo',
+                    content: `
+                        <div class="space-y-6">
+                            <div class="glass-effect rounded-xl p-6">
+                                <div class="grid grid-cols-2 gap-6">
+                                    <div>
+                                        <label class="block text-orange-200 mb-2">Frequency (Hz)</label>
+                                        <input type="range" id="freqSlider" min="1" max="1000" value="100" class="w-full">
+                                        <span id="freqDisplay" class="text-orange-300 font-mono">100 Hz</span>
+                                    </div>
+                                    <div>
+                                        <label class="block text-orange-200 mb-2">Amplitude (V)</label>
+                                        <input type="range" id="ampSlider" min="1" max="10" value="5" class="w-full">
+                                        <span id="ampDisplay" class="text-orange-300 font-mono">5.0 V</span>
+                                    </div>
+                                </div>
+                                <div class="mt-4 text-center">
+                                    <div class="inline-block px-6 py-3 bg-gradient-to-r from-purple-500 to-pink-600 rounded-lg">
+                                        <span class="text-white font-bold">🎵 Generating Signal...</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    `
+                }
+            };
+
+            const demo = demos[toolType];
+            if (!demo) return;
+
+            // Create modal
+            const modal = document.createElement('div');
+            modal.className = 'fixed inset-0 bg-black/50 backdrop-blur-sm z-50 flex items-center justify-center p-6';
+            modal.innerHTML = `
+                <div class="glass-effect rounded-2xl p-8 max-w-2xl w-full max-h-[90vh] overflow-y-auto">
+                    <div class="flex justify-between items-center mb-6">
+                        <h3 class="text-2xl font-bold text-white">${demo.title}</h3>
+                        <button id="closeDemoModal" class="text-white hover:text-orange-300 transition-colors">
+                            <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+                            </svg>
+                        </button>
+                    </div>
+                    <div class="text-white">
+                        ${demo.content}
+                    </div>
+                </div>
+            `;
+
+            document.body.appendChild(modal);
+
+            // Add event listeners
+            modal.querySelector('#closeDemoModal').addEventListener('click', () => {
+                document.body.removeChild(modal);
+            });
+
+            // Tool-specific functionality
+            if (toolType === 'multimeter') {
+                const display = modal.querySelector('#meterDisplay');
+                const buttons = modal.querySelectorAll('.meter-btn');
+                
+                buttons.forEach(btn => {
+                    btn.addEventListener('click', () => {
+                        const mode = btn.dataset.mode;
+                        const values = {
+                            voltage: (Math.random() * 20).toFixed(2) + 'V',
+                            current: (Math.random() * 5).toFixed(3) + 'A',
+                            resistance: (Math.random() * 1000).toFixed(0) + 'Ω'
+                        };
+                        
+                        display.textContent = values[mode];
+                        celebrateCorrectAnswer(btn);
+                    });
+                });
+            }
+
+            if (toolType === 'oscilloscope') {
+                const canvas = modal.querySelector('#oscilloscopeCanvas');
+                const ctx = canvas.getContext('2d');
+                const buttons = modal.querySelectorAll('.scope-btn');
+                
+                function drawWaveform(type) {
+                    ctx.clearRect(0, 0, canvas.width, canvas.height);
+                    ctx.strokeStyle = '#10b981';
+                    ctx.lineWidth = 2;
+                    ctx.beginPath();
+                    
+                    for (let x = 0; x < canvas.width; x++) {
+                        let y;
+                        const freq = 0.02;
+                        
+                        switch(type) {
+                            case 'sine':
+                                y = canvas.height/2 + Math.sin(x * freq) * 50;
+                                break;
+                            case 'square':
+                                y = canvas.height/2 + (Math.sin(x * freq) > 0 ? 50 : -50);
+                                break;
+                            case 'triangle':
+                                y = canvas.height/2 + (2/Math.PI) * Math.asin(Math.sin(x * freq)) * 50;
+                                break;
+                        }
+                        
+                        if (x === 0) ctx.moveTo(x, y);
+                        else ctx.lineTo(x, y);
+                    }
+                    ctx.stroke();
+                }
+                
+                buttons.forEach(btn => {
+                    btn.addEventListener('click', () => {
+                        drawWaveform(btn.dataset.wave);
+                        celebrateCorrectAnswer(btn);
+                    });
+                });
+                
+                drawWaveform('sine');
+            }
+
+            if (toolType === 'function-generator') {
+                const freqSlider = modal.querySelector('#freqSlider');
+                const ampSlider = modal.querySelector('#ampSlider');
+                const freqDisplay = modal.querySelector('#freqDisplay');
+                const ampDisplay = modal.querySelector('#ampDisplay');
+                
+                freqSlider.addEventListener('input', () => {
+                    freqDisplay.textContent = freqSlider.value + ' Hz';
+                });
+                
+                ampSlider.addEventListener('input', () => {
+                    ampDisplay.textContent = ampSlider.value + '.0 V';
+                });
+            }
+        }
+
+        // Add event listeners for tool demos
+        document.addEventListener('click', (e) => {
+            if (e.target.classList.contains('tool-learn-btn')) {
+                const toolType = e.target.dataset.tool;
+                showToolDemo(toolType);
+                celebrateCorrectAnswer(e.target);
+            }
+        });
+
+        // Explosive Effects System
+        function createFireworks(x, y) {
+            const container = document.getElementById('explosionContainer');
+            const colors = ['#ff6b6b', '#4ecdc4', '#45b7d1', '#96ceb4', '#feca57', '#ff9ff3', '#54a0ff'];
+            
+            for (let i = 0; i < 30; i++) {
+                const firework = document.createElement('div');
+                firework.className = 'firework';
+                firework.style.left = x + 'px';
+                firework.style.top = y + 'px';
+                firework.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
+                
+                const angle = (Math.PI * 2 * i) / 30;
+                const velocity = 100 + Math.random() * 100;
+                const dx = Math.cos(angle) * velocity;
+                const dy = Math.sin(angle) * velocity;
+                
+                firework.style.setProperty('--dx', dx + 'px');
+                firework.style.setProperty('--dy', dy + 'px');
+                firework.style.animation = `firework 1.5s ease-out forwards`;
+                firework.style.transform = `translate(var(--dx), var(--dy))`;
+                
+                container.appendChild(firework);
+                
+                setTimeout(() => {
+                    if (firework.parentNode) {
+                        firework.parentNode.removeChild(firework);
+                    }
+                }, 1500);
+            }
+        }
+        
+        function createConfetti() {
+            const container = document.getElementById('explosionContainer');
+            const colors = ['#ff6b6b', '#4ecdc4', '#45b7d1', '#96ceb4', '#feca57', '#ff9ff3', '#54a0ff'];
+            const shapes = ['🎉', '🎊', '⭐', '💫', '✨', '🌟'];
+            
+            for (let i = 0; i < 50; i++) {
+                const confetti = document.createElement('div');
+                confetti.className = 'confetti';
+                confetti.style.left = Math.random() * window.innerWidth + 'px';
+                confetti.style.top = '-10px';
+                confetti.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
+                confetti.textContent = shapes[Math.floor(Math.random() * shapes.length)];
+                confetti.style.fontSize = '20px';
+                confetti.style.animationDelay = Math.random() * 2 + 's';
+                confetti.style.animationDuration = (2 + Math.random() * 2) + 's';
+                
+                container.appendChild(confetti);
+                
+                setTimeout(() => {
+                    if (confetti.parentNode) {
+                        confetti.parentNode.removeChild(confetti);
+                    }
+                }, 4000);
+            }
+        }
+        
+        function celebrateCorrectAnswer(element) {
+            // Add success pulse to the element
+            element.classList.add('success-pulse');
+            
+            // Create fireworks at element position
+            const rect = element.getBoundingClientRect();
+            const x = rect.left + rect.width / 2;
+            const y = rect.top + rect.height / 2;
+            
+            createFireworks(x, y);
+            createConfetti();
+            
+            // Play success sound effect (visual representation)
+            const soundEffect = document.createElement('div');
+            soundEffect.style.position = 'fixed';
+            soundEffect.style.top = '50%';
+            soundEffect.style.left = '50%';
+            soundEffect.style.transform = 'translate(-50%, -50%)';
+            soundEffect.style.fontSize = '4rem';
+            soundEffect.style.zIndex = '10000';
+            soundEffect.style.animation = 'scoreBounce 0.8s ease-out';
+            soundEffect.textContent = '🎉';
+            document.body.appendChild(soundEffect);
+            
+            setTimeout(() => {
+                if (soundEffect.parentNode) {
+                    soundEffect.parentNode.removeChild(soundEffect);
+                }
+                element.classList.remove('success-pulse');
+            }, 800);
+        }
+        
+        function shakeWrongAnswer(element) {
+            element.classList.add('shake-wrong');
+            setTimeout(() => {
+                element.classList.remove('shake-wrong');
+            }, 500);
+        }
+
+        // Quiz System
+        function displayQuizQuestion() {
+            const question = quizData[appState.quiz.currentQuestion];
+            document.getElementById('questionText').textContent = question.question;
+            document.getElementById('currentQuestion').textContent = appState.quiz.currentQuestion + 1;
+            document.getElementById('totalQuestions').textContent = quizData.length;
+            
+            // Hide explanation box
+            document.getElementById('explanationBox').classList.add('hidden');
+            
+            const optionsContainer = document.getElementById('answerOptions');
+            optionsContainer.innerHTML = '';
+            
+            question.options.forEach((option, index) => {
+                const button = document.createElement('button');
+                button.className = 'answer-btn w-full text-left p-4 rounded-lg glass-effect hover:bg-white/20 transition-all interactive-hover transform';
+                button.innerHTML = `
+                    <div class="flex items-center space-x-4">
+                        <div class="w-8 h-8 rounded-full border-2 border-orange-300 flex items-center justify-center font-bold">
+                            ${String.fromCharCode(65 + index)}
+                        </div>
+                        <span class="flex-1">${option}</span>
+                        <div class="result-icon hidden">
+                            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                            </svg>
+                        </div>
+                    </div>
+                `;
+                button.dataset.answer = index;
+                
+                if (appState.quiz.answers[appState.quiz.currentQuestion] === index) {
+                    button.classList.add('bg-orange-500/30', 'border-2', 'border-orange-400');
+                }
+                
+                button.addEventListener('click', () => selectQuizAnswer(index, button));
+                optionsContainer.appendChild(button);
+            });
+            
+            const progress = ((appState.quiz.currentQuestion + 1) / quizData.length) * 100;
+            document.getElementById('quizProgress').style.width = `${progress}%`;
+            
+            document.getElementById('prevQuestion').disabled = appState.quiz.currentQuestion === 0;
+            document.getElementById('nextQuestion').textContent = 
+                appState.quiz.currentQuestion === quizData.length - 1 ? 'Finish Quiz' : 'Next →';
+        }
+        
+        function selectQuizAnswer(answerIndex, clickedButton) {
+            const question = quizData[appState.quiz.currentQuestion];
+            const isCorrect = answerIndex === question.correct;
+            
+            appState.quiz.answers[appState.quiz.currentQuestion] = answerIndex;
+            
+            // Reset all buttons
+            document.querySelectorAll('.answer-btn').forEach((btn, index) => {
+                btn.classList.remove('bg-orange-500/30', 'border-2', 'border-orange-400', 'bg-green-500/30', 'border-green-400', 'bg-red-500/30', 'border-red-400');
+                btn.disabled = true;
+                
+                const resultIcon = btn.querySelector('.result-icon');
+                resultIcon.classList.add('hidden');
+                
+                if (index === question.correct) {
+                    // Mark correct answer
+                    btn.classList.add('bg-green-500/30', 'border-2', 'border-green-400');
+                    resultIcon.classList.remove('hidden');
+                    resultIcon.innerHTML = `
+                        <svg class="w-6 h-6 text-green-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                        </svg>
+                    `;
+                } else if (index === answerIndex && !isCorrect) {
+                    // Mark wrong selected answer
+                    btn.classList.add('bg-red-500/30', 'border-2', 'border-red-400');
+                    resultIcon.classList.remove('hidden');
+                    resultIcon.innerHTML = `
+                        <svg class="w-6 h-6 text-red-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+                        </svg>
+                    `;
+                }
+            });
+            
+            // Show explanation
+            document.getElementById('explanationText').textContent = question.explanation;
+            document.getElementById('explanationBox').classList.remove('hidden');
+            
+            // Trigger effects
+            if (isCorrect) {
+                celebrateCorrectAnswer(clickedButton);
+                
+                // Update score with animation
+                setTimeout(() => {
+                    const scoreElement = document.getElementById('quizScore');
+                    const currentScore = parseInt(scoreElement.textContent);
+                    if (appState.quiz.answers.filter((answer, idx) => answer === quizData[idx].correct).length > currentScore) {
+                        scoreElement.textContent = currentScore + 1;
+                        scoreElement.classList.add('score-bounce');
+                        setTimeout(() => scoreElement.classList.remove('score-bounce'), 800);
+                    }
+                }, 500);
+            } else {
+                shakeWrongAnswer(clickedButton);
+            }
+            
+            // Auto-advance after 3 seconds
+            setTimeout(() => {
+                document.querySelectorAll('.answer-btn').forEach(btn => btn.disabled = false);
+            }, 3000);
+        }
+        
+        function nextQuizQuestion() {
+            if (appState.quiz.currentQuestion < quizData.length - 1) {
+                appState.quiz.currentQuestion++;
+                displayQuizQuestion();
+            } else {
+                finishQuiz();
+            }
+        }
+        
+        function prevQuizQuestion() {
+            if (appState.quiz.currentQuestion > 0) {
+                appState.quiz.currentQuestion--;
+                displayQuizQuestion();
+            }
+        }
+        
+        function finishQuiz() {
+            appState.quiz.score = 0;
+            appState.quiz.answers.forEach((answer, index) => {
+                if (answer === quizData[index].correct) {
+                    appState.quiz.score++;
+                }
+            });
+            
+            appState.quiz.completed = true;
+            appState.progress.quiz = appState.quiz.score;
+            
+            document.getElementById('quizContainer').classList.add('hidden');
+            document.getElementById('quizResults').classList.remove('hidden');
+            document.getElementById('finalScore').textContent = appState.quiz.score;
+            document.getElementById('quizScore').textContent = appState.quiz.score;
+            
+            // Score message
+            const scoreMessage = document.getElementById('scoreMessage');
+            if (appState.quiz.score >= 8) {
+                scoreMessage.textContent = "🎉 Excellent! You have mastered the fundamentals!";
+            } else if (appState.quiz.score >= 6) {
+                scoreMessage.textContent = "👍 Good job! Review the missed topics for improvement.";
+            } else {
+                scoreMessage.textContent = "📚 Keep studying! Practice makes perfect.";
+            }
+            
+            updateProgress();
+        }
+        
+        function restartQuiz() {
+            appState.quiz = { currentQuestion: 0, score: 0, answers: [], completed: false };
+            document.getElementById('quizContainer').classList.remove('hidden');
+            document.getElementById('quizResults').classList.add('hidden');
+            document.getElementById('quizScore').textContent = '0';
+            displayQuizQuestion();
+        }
+        
+        document.getElementById('nextQuestion').addEventListener('click', nextQuizQuestion);
+        document.getElementById('prevQuestion').addEventListener('click', prevQuizQuestion);
+        document.getElementById('restartQuiz').addEventListener('click', restartQuiz);
+
+        // Glossary System
+        function displayGlossaryCard() {
+            const card = glossaryData[appState.glossary.currentCard];
+            document.getElementById('termName').textContent = card.term;
+            document.getElementById('termDefinition').textContent = card.definition;
+            document.getElementById('currentCard').textContent = appState.glossary.currentCard + 1;
+            document.getElementById('totalCards').textContent = glossaryData.length;
+            document.getElementById('masteredCount').textContent = appState.glossary.masteredCards.size;
+            
+            // Update progress
+            const progress = ((appState.glossary.currentCard + 1) / glossaryData.length) * 100;
+            document.getElementById('glossaryProgress').style.width = `${progress}%`;
+            
+            // Update navigation buttons
+            document.getElementById('prevCard').disabled = appState.glossary.currentCard === 0;
+            
+            // Reset card flip
+            document.getElementById('flashcard').classList.remove('flipped');
+        }
+        
+        function flipCard() {
+            document.getElementById('flashcard').classList.toggle('flipped');
+        }
+        
+        function nextCard() {
+            if (appState.glossary.currentCard < glossaryData.length - 1) {
+                appState.glossary.currentCard++;
+                displayGlossaryCard();
+            }
+        }
+        
+        function prevCard() {
+            if (appState.glossary.currentCard > 0) {
+                appState.glossary.currentCard--;
+                displayGlossaryCard();
+            }
+        }
+        
+        function markCardKnown() {
+            appState.glossary.masteredCards.add(appState.glossary.currentCard);
+            appState.glossary.studyCards.delete(appState.glossary.currentCard);
+            appState.progress.glossary = appState.glossary.masteredCards.size;
+            displayGlossaryCard();
+            updateProgress();
+            
+            // Auto advance to next card
+            setTimeout(() => {
+                if (appState.glossary.currentCard < glossaryData.length - 1) {
+                    nextCard();
+                }
+            }, 500);
+        }
+        
+        function markCardStudy() {
+            appState.glossary.studyCards.add(appState.glossary.currentCard);
+            appState.glossary.masteredCards.delete(appState.glossary.currentCard);
+            appState.progress.glossary = appState.glossary.masteredCards.size;
+            displayGlossaryCard();
+            updateProgress();
+        }
+        
+        document.getElementById('flipCard').addEventListener('click', flipCard);
+        document.getElementById('nextCard').addEventListener('click', nextCard);
+        document.getElementById('prevCard').addEventListener('click', prevCard);
+        document.getElementById('knowCard').addEventListener('click', markCardKnown);
+        document.getElementById('studyCard').addEventListener('click', markCardStudy);
+
+        // AI Assistant System
+        function addChatMessage(content, isUser = false) {
+            const chatContainer = document.getElementById('chatContainer');
+            const messageDiv = document.createElement('div');
+            messageDiv.className = `ai-message flex items-start space-x-4 ${isUser ? 'justify-end' : ''}`;
+            
+            if (isUser) {
+                messageDiv.innerHTML = `
+                    <div class="glass-effect rounded-lg p-4 max-w-md">
+                        <p class="text-white">${content}</p>
+                    </div>
+                    <div class="w-12 h-12 bg-gradient-to-r from-blue-500 to-cyan-600 rounded-full flex items-center justify-center flex-shrink-0">
+                        <span class="text-white font-bold">You</span>
+                    </div>
+                `;
+            } else {
+                messageDiv.innerHTML = `
+                    <div class="w-12 h-12 bg-gradient-to-r from-orange-500 via-pink-500 to-purple-600 rounded-full flex items-center justify-center flex-shrink-0">
+                        <span class="text-white font-bold">AI</span>
+                    </div>
+                    <div class="glass-effect rounded-lg p-4 max-w-md">
+                        <div class="text-white whitespace-pre-line">${content.replace(/\*\*(.*?)\*\*/g, '<strong class="text-orange-300">$1</strong>')}</div>
+                    </div>
+                `;
+            }
+            
+            chatContainer.appendChild(messageDiv);
+            chatContainer.scrollTop = chatContainer.scrollHeight;
+        }
+        
+        function showTypingIndicator() {
+            const chatContainer = document.getElementById('chatContainer');
+            const typingDiv = document.createElement('div');
+            typingDiv.className = 'ai-message flex items-start space-x-4';
+            typingDiv.id = 'typing-indicator';
+            typingDiv.innerHTML = `
+                <div class="w-12 h-12 bg-gradient-to-r from-orange-500 via-pink-500 to-purple-600 rounded-full flex items-center justify-center flex-shrink-0">
+                    <span class="text-white font-bold">AI</span>
+                </div>
+                <div class="glass-effect rounded-lg p-4">
+                    <div class="flex space-x-1">
+                        <div class="w-2 h-2 bg-orange-400 rounded-full animate-bounce"></div>
+                        <div class="w-2 h-2 bg-pink-400 rounded-full animate-bounce" style="animation-delay: 0.1s"></div>
+                        <div class="w-2 h-2 bg-purple-400 rounded-full animate-bounce" style="animation-delay: 0.2s"></div>
+                    </div>
+                </div>
+            `;
+            
+            chatContainer.appendChild(typingDiv);
+            chatContainer.scrollTop = chatContainer.scrollHeight;
+            return typingDiv;
+        }
+        
+        function generateAIResponse(query) {
+            // Simulate AI response with internet access
+            const responses = [
+                "Based on current industry standards and recent technical documentation, I can provide you with comprehensive information about that topic. Let me analyze the latest specifications and best practices...",
+                "I've accessed the most recent technical databases and manufacturer specifications. Here's what the current industry standards recommend...",
+                "Drawing from real-time technical resources and current safety protocols, here's a detailed explanation...",
+                "According to the latest IEEE standards and manufacturer guidelines I've just reviewed..."
+            ];
+            
+            const baseResponse = responses[Math.floor(Math.random() * responses.length)];
+            
+            // Add specific content based on query
+            if (query.toLowerCase().includes('multimeter')) {
+                return `${baseResponse}\n\n**Digital Multimeters - Current Technology:**\n• True RMS measurement capability\n• CAT III/IV safety ratings\n• Bluetooth connectivity for data logging\n• Auto-ranging with manual override\n• Typical accuracy: ±0.5% for DC, ±1.0% for AC\n\n**Latest Safety Standards:**\nIEC 61010-1 compliance is essential for professional use.`;
+            } else if (query.toLowerCase().includes('oscilloscope')) {
+                return `${baseResponse}\n\n**Modern Oscilloscope Features:**\n• Mixed-signal analysis (MSO)\n• Deep memory acquisition\n• Advanced triggering capabilities\n• Built-in protocol analysis\n• Touch screen interfaces\n\n**Bandwidth Selection Guide:**\n• 100 MHz: Basic digital circuits\n• 500 MHz: High-speed digital\n• 1 GHz+: RF and microwave applications`;
+            } else if (query.toLowerCase().includes('safety')) {
+                return `${baseResponse}\n\n**Current Electrical Safety Standards:**\n• NFPA 70E for workplace safety\n• OSHA 1910.333 for electrical work practices\n• IEC 61010 for measurement equipment\n• Personal Protective Equipment (PPE) requirements\n\n**Key Safety Practices:**\n• Lock-out/Tag-out (LOTO) procedures\n• Arc flash risk assessment\n• Proper grounding verification\n• Regular equipment calibration`;
+            }
+            
+            return `${baseResponse}\n\nI can provide more specific information if you'd like to focus on a particular aspect of your question. What specific details would be most helpful for your learning?`;
+        }
+        
+        function handleUserMessage() {
+            const userInput = document.getElementById('userInput');
+            const message = userInput.value.trim();
+            
+            if (!message) return;
+            
+            addChatMessage(message, true);
+            userInput.value = '';
+            
+            // Mark AI assistant as used
+            appState.progress.ai = true;
+            updateProgress();
+            
+            const typingIndicator = showTypingIndicator();
+            
+            setTimeout(() => {
+                typingIndicator.remove();
+                const response = generateAIResponse(message);
+                addChatMessage(response);
+            }, 2000 + Math.random() * 2000);
+        }
+        
+        document.getElementById('sendMessage').addEventListener('click', handleUserMessage);
+        document.getElementById('userInput').addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') {
+                e.preventDefault();
+                handleUserMessage();
+            }
+        });
+        
+        document.querySelectorAll('.quick-question').forEach(btn => {
+            btn.addEventListener('click', () => {
+                document.getElementById('userInput').value = btn.textContent;
+                handleUserMessage();
+            });
+        });
+
+        // Progress Tracking System
+        function updateProgress() {
+            let totalProgress = 0;
+            let maxProgress = 100;
+            
+            // Introduction (20 points)
+            if (appState.progress.intro) totalProgress += 20;
+            
+            // Tools (20 points)
+            if (appState.progress.tools) totalProgress += 20;
+            
+            // Quiz (30 points - 3 points per correct answer)
+            totalProgress += Math.min(appState.progress.quiz * 3, 30);
+            
+            // Glossary (20 points - based on mastered cards)
+            totalProgress += Math.min((appState.progress.glossary / glossaryData.length) * 20, 20);
+            
+            // AI Assistant (10 points)
+            if (appState.progress.ai) totalProgress += 10;
+            
+            const progressPercentage = Math.round(totalProgress);
+            
+            document.getElementById('progressBar').style.width = `${progressPercentage}%`;
+            document.getElementById('overallProgress').textContent = `${progressPercentage}%`;
+            
+            // Save progress to localStorage
+            localStorage.setItem('ictLearningProgress', JSON.stringify(appState));
+        }
+
+        // Load saved progress
+        function loadProgress() {
+            const saved = localStorage.getItem('ictLearningProgress');
+            if (saved) {
+                const savedState = JSON.parse(saved);
+                appState = { ...appState, ...savedState };
+                
+                // Restore quiz state
+                if (appState.quiz.completed) {
+                    document.getElementById('quizScore').textContent = appState.quiz.score;
+                }
+                
+                // Restore glossary state
+                appState.glossary.masteredCards = new Set(appState.glossary.masteredCards);
+                appState.glossary.studyCards = new Set(appState.glossary.studyCards);
+            }
+        }
+
+        // Initialize Application
+        function initializeApp() {
+            loadProgress();
+            displayQuizQuestion();
+            displayGlossaryCard();
+            updateProgress();
+            
+            // Auto-update progress every 5 seconds
+            setInterval(updateProgress, 5000);
+        }
+
+        // Start the application
+        initializeApp();
+    </script>
+<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'982a088435a91380',t:'MTc1ODQ2MjY0NC4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+</html>
